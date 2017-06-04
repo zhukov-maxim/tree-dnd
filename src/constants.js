@@ -1,2 +1,6 @@
-export const FOLDER = 'folder';
-export const FILE = 'file';
+const ItemTypes = {
+  FOLDER: 'folder',
+  FILE: 'file'
+};
+
+export default ItemTypes;

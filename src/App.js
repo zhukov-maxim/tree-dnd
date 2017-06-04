@@ -1,19 +1,26 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { DragDropContext } from 'react-dnd';
+import HTML5Backend from 'react-dnd-html5-backend';
 import TreeView from './components/TreeView';
 import Folder from './components/Folder';
 import File from './components/File';
-import { FILE, FOLDER } from './constants';
+import ItemTypes from './constants';
 
 class App extends React.Component {
   static renderElement(element) {
-    if (element.type === FILE) {
+    if (element.type === ItemTypes.FILE) {
       return (
-        <File key={element.name} name={element.name} />
+        <File key={element.id} id={element.id} name={element.name} />
       );
-    } else if (element.type === FOLDER) {
+    } else if (element.type === ItemTypes.FOLDER) {
       return (
-        <Folder key={element.name} name={element.name}>
+        <Folder
+          key={element.id}
+          id={element.id}
+          name={element.name}
+          onDrop={id => console.log(`Dropped file id: ${id}`)}
+        >
           {
             element.content ?
             App.renderFolderStructure(element.content) :
@@ -51,4 +58,4 @@ App.defaultProps = {
   folderStructure: []
 };
 
-export default App;
+export default DragDropContext(HTML5Backend)(App);

@@ -4,6 +4,7 @@ body {
 }
 
 .element {
+  position: relative;
   display: inline-block;
   vertical-align: top;
   cursor: pointer;
@@ -39,4 +40,16 @@ body {
 
 .TreeView {
   user-select: none;
+}
+
+.drop-zone {
+  box-sizing: border-box;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  border-radius: 4px;
+  z-index: 1;
+  opacity: 0.4;
 }

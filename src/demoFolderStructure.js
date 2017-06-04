@@ -1,36 +1,43 @@
-import { FILE, FOLDER } from './constants';
+import ItemTypes from './constants';
 
 const demoFolderStructure = [
   {
-    type: FOLDER,
+    id: 1,
+    type: ItemTypes.FOLDER,
     name: 'Answers',
     content: [
       {
-        type: FOLDER,
+        id: 2,
+        type: ItemTypes.FOLDER,
         name: 'Read'
       },
       {
-        type: FOLDER,
+        id: 3,
+        type: ItemTypes.FOLDER,
         name: 'Unread',
         content: [
           {
-            type: FOLDER,
+            id: 4,
+            type: ItemTypes.FOLDER,
             name: 'Empty Folder'
           },
           {
-            type: FILE,
+            id: 5,
+            type: ItemTypes.FILE,
             name: 'From Baleog.msg'
           }
         ]
       },
       {
-        type: FILE,
+        id: 6,
+        type: ItemTypes.FILE,
         name: 'From Olaf.msg'
       }
     ]
   },
   {
-    type: FILE,
+    id: 7,
+    type: ItemTypes.FILE,
     name: 'From Erik.msg'
   }
 ];
