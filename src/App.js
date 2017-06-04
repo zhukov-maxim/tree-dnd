@@ -8,7 +8,31 @@ import File from './components/File';
 import ItemTypes from './constants';
 
 class App extends React.Component {
-  static renderElement(element) {
+  constructor(props) {
+    super();
+    this.state = {
+      folderStructure: props.folderStructure
+    };
+  }
+
+  handleMoveItem(source, target) {
+    const currentfolderStructure = this.state.folderStructure;
+
+    // TODO: Implement movement the source into the target.
+    const newFolderStructure = currentfolderStructure;
+
+    console.log(`Moving ${source} to ${target}`);
+
+    this.setState({
+      folderStructure: newFolderStructure
+    });
+  }
+
+  renderFolderStructure(folderStructure) {
+    return folderStructure.map(element => this.renderElement(element));
+  }
+
+  renderElement(element) {
     if (element.type === ItemTypes.FILE) {
       return (
         <File key={element.id} id={element.id} name={element.name} />
@@ -19,11 +43,11 @@ class App extends React.Component {
           key={element.id}
           id={element.id}
           name={element.name}
-          onDrop={id => console.log(`Dropped file id: ${id}`)}
+          onDrop={id => this.handleMoveItem(id, element.id)}
         >
           {
             element.content ?
-            App.renderFolderStructure(element.content) :
+            this.renderFolderStructure(element.content) :
             null
           }
         </Folder>
@@ -33,17 +57,13 @@ class App extends React.Component {
     return null;
   }
 
-  static renderFolderStructure(folderStructure) {
-    return folderStructure.map(element => App.renderElement(element));
-  }
-
   render() {
-    const { folderStructure } = this.props;
+    const { folderStructure } = this.state;
 
     return (
       <div className="App">
         <TreeView>
-          {App.renderFolderStructure(folderStructure)}
+          {this.renderFolderStructure(folderStructure)}
         </TreeView>
       </div>
     );
