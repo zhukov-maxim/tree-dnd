@@ -1,5 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
+import './index.css';
+import demoFolderStructure from './demoFolderStructure';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(
+  <App folderStructure={demoFolderStructure} />,
+  document.getElementById('root')
+);

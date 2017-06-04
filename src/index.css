@@ -1,0 +1,42 @@
+body {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  margin: 20px;
+}
+
+.element {
+  display: inline-block;
+  vertical-align: top;
+  cursor: pointer;
+  padding: 3px 6px;
+  border-width: 0;
+  border-style: solid;
+  border-radius: 4px;
+  color: #333;
+}
+
+.File:hover {
+  background-color: #ffdf85;
+}
+
+.Folder__name {
+  display: inline-block;
+  font-weight: bold;
+}
+
+.Folder__name:hover {
+  background-color: #a8d8ff;
+}
+
+.Folder__content {
+  margin-left: 20px;
+}
+
+.TreeView {
+  padding: 6px;
+  border: 1px solid #aaa;
+  border-radius: 4px;
+}
+
+.TreeView {
+  user-select: none;
+}
