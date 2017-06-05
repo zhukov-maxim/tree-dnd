@@ -18,10 +18,26 @@ class App extends React.Component {
   handleMoveItem(source, target) {
     const currentfolderStructure = this.state.folderStructure;
 
-    // TODO: Implement movement the source into the target.
-    const newFolderStructure = currentfolderStructure;
+    const newFolderStructure = {
+      ...currentfolderStructure
+    };
 
-    console.log(`Moving ${source} to ${target}`);
+    const entries = Object.entries(newFolderStructure);
+
+    // Remove source from previous folder.
+    entries.map((item) => {
+      if (item[1].type === ItemTypes.FILE) {
+        return item;
+      } else if (item[1].content.includes(source)) {
+        console.log(item[1].content);
+        const index = item[1].content.indexOf(source);
+        item[1].content.splice(index, 1);
+      }
+      return item;
+    });
+
+    // Put source to target folder.
+    newFolderStructure[target].content.push(source);
 
     this.setState({
       folderStructure: newFolderStructure
