@@ -1,7 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { DropTarget } from 'react-dnd';
+import { DragSource, DropTarget } from 'react-dnd';
 import ItemTypes from '../constants';
+
+const folderSource = {
+  beginDrag(props) {
+    return {
+      id: props.id
+    };
+  }
+};
 
 const folderTarget = {
   canDrop() {
@@ -14,11 +22,18 @@ const folderTarget = {
   }
 };
 
-function collect(connect, monitor) {
+function collectTarget(connect, monitor) {
   return {
     connectDropTarget: connect.dropTarget(),
     isOver: monitor.isOver(),
     canDrop: monitor.canDrop()
+  };
+}
+
+function collectSource(connect, monitor) {
+  return {
+    connectDragSource: connect.dragSource(),
+    isDragging: monitor.isDragging()
   };
 }
 
@@ -35,18 +50,29 @@ class Folder extends React.Component {
   }
 
   render() {
-    const { name, children, connectDropTarget, isOver, canDrop } = this.props;
+    const {
+      name, children,
+      connectDragSource, isDragging,
+      connectDropTarget, isOver, canDrop
+    } = this.props;
 
     return (
       <div className="Folder">
         {isOver}
-        {connectDropTarget(
-          <div className="element Folder__name">
-            {name}
-            {isOver && !canDrop && Folder.renderOverlay('red')}
-            {isOver && canDrop && Folder.renderOverlay('green')}
-          </div>
-        )}
+        {
+          connectDragSource(
+            connectDropTarget(
+              <div
+                className="element Folder__name"
+                style={{ opacity: isDragging ? 0.5 : 1 }}
+              >
+                {name}
+                {isOver && !canDrop && Folder.renderOverlay('red')}
+                {isOver && canDrop && Folder.renderOverlay('green')}
+              </div>
+            )
+          )
+        }
         <div className="Folder__content">
           {children}
         </div>
@@ -59,6 +85,8 @@ Folder.propTypes = {
   name: PropTypes.string.isRequired,
   children: PropTypes.node,
   // onDrop: PropTypes.func.isRequired, // It's used in folderTarget
+  connectDragSource: PropTypes.func.isRequired,
+  isDragging: PropTypes.bool.isRequired,
   isOver: PropTypes.bool.isRequired,
   canDrop: PropTypes.bool.isRequired,
   connectDropTarget: PropTypes.func.isRequired
@@ -68,4 +96,8 @@ Folder.defaultProps = {
   children: []
 };
 
-export default DropTarget(ItemTypes.FILE, folderTarget, collect)(Folder);
+export default
+  DropTarget(
+    [ItemTypes.FILE, ItemTypes.FOLDER], folderTarget, collectTarget)(
+      DragSource(ItemTypes.FOLDER, folderSource, collectSource)(Folder)
+);
