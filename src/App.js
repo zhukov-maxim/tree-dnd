@@ -60,7 +60,24 @@ class App extends React.Component {
           name={item.name}
           onDrop={sourceId => this.handleMoveItem(sourceId, id)}
         >
-          {item.content.map(childId => this.renerItem(structure, childId))}
+          {item.content.sort((a, b) => {
+            // Folders go before files.
+            if (structure[a].type === ItemTypes.FOLDER &&
+              structure[b].type === ItemTypes.FILE) {
+              return -1;
+            } else if (structure[a].type === ItemTypes.FILE &&
+              structure[b].type === ItemTypes.FOLDER) {
+              return 1;
+            }
+
+            // Sort by name.
+            if (structure[a].name < structure[b].name) {
+              return -1;
+            } else if (structure[a].name > structure[b].name) {
+              return 1;
+            }
+            return 0;
+          }).map(childId => this.renerItem(structure, childId))}
         </Folder>
       );
     } else if (item.type === ItemTypes.FILE) {
