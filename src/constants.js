@@ -1,6 +1,7 @@
 const ItemTypes = {
+  FILE: 'file',
   FOLDER: 'folder',
-  FILE: 'file'
+  ROOT: 'root'
 };
 
 export default ItemTypes;

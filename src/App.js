@@ -28,29 +28,29 @@ class App extends React.Component {
     });
   }
 
-  renderFolderStructure(folderStructure) {
-    return folderStructure.map(element => this.renderElement(element));
-  }
+  renerItem(structure, id) {
+    const item = structure[id];
 
-  renderElement(element) {
-    if (element.type === ItemTypes.FILE) {
+    if (item.type === ItemTypes.ROOT) {
       return (
-        <File key={element.id} id={element.id} name={element.name} />
+        <TreeView>
+          {item.content.map(childId => this.renerItem(structure, childId))}
+        </TreeView>
       );
-    } else if (element.type === ItemTypes.FOLDER) {
+    } else if (item.type === ItemTypes.FOLDER) {
       return (
         <Folder
-          key={element.id}
-          id={element.id}
-          name={element.name}
-          onDrop={id => this.handleMoveItem(id, element.id)}
+          key={id}
+          id={id}
+          name={item.name}
+          onDrop={sourceId => this.handleMoveItem(sourceId, id)}
         >
-          {
-            element.content ?
-            this.renderFolderStructure(element.content) :
-            null
-          }
+          {item.content.map(childId => this.renerItem(structure, childId))}
         </Folder>
+      );
+    } else if (item.type === ItemTypes.FILE) {
+      return (
+        <File key={id} id={id} name={item.name} />
       );
     }
 
@@ -62,16 +62,15 @@ class App extends React.Component {
 
     return (
       <div className="App">
-        <TreeView>
-          {this.renderFolderStructure(folderStructure)}
-        </TreeView>
+        {this.renerItem(folderStructure, 0)}
       </div>
     );
   }
 }
 
 App.propTypes = {
-  folderStructure: PropTypes.arrayOf(PropTypes.object)
+  // TODO: Specify shapes.
+  folderStructure: PropTypes.PropTypes.objectOf(PropTypes.object)
 };
 
 App.defaultProps = {
