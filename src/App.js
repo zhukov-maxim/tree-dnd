@@ -29,7 +29,6 @@ class App extends React.Component {
       if (item[1].type === ItemTypes.FILE) {
         return item;
       } else if (item[1].content.includes(source)) {
-        console.log(item[1].content);
         const index = item[1].content.indexOf(source);
         item[1].content.splice(index, 1);
       }
