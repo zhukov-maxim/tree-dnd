@@ -18,7 +18,7 @@ const demoFolderStructure = {
   3: {
     type: ItemTypes.FOLDER,
     name: 'Unread',
-    content: [4, 5]
+    content: [4, 8, 9, 5, 10, 11]
   },
   4: {
     type: ItemTypes.FOLDER,
@@ -36,6 +36,23 @@ const demoFolderStructure = {
   7: {
     type: ItemTypes.FILE,
     name: 'From Erik.msg'
+  },
+  8: {
+    type: ItemTypes.FILE,
+    name: 'From Balrog.msg'
+  },
+  9: {
+    type: ItemTypes.FOLDER,
+    name: 'Another Folder',
+    content: []
+  },
+  10: {
+    type: ItemTypes.FILE,
+    name: 'Gandalf'
+  },
+  11: {
+    type: ItemTypes.FILE,
+    name: 'Frodo'
   }
 };
 

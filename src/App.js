@@ -43,13 +43,40 @@ class App extends React.Component {
     });
   }
 
-  renerItem(structure, id) {
+  handleChangeOrder(id, nextIndex) {
+    const currentfolderStructure = this.state.folderStructure;
+
+    const newFolderStructure = {
+      ...currentfolderStructure
+    };
+
+    const entries = Object.entries(newFolderStructure);
+
+    const parent = entries.find(item =>
+      item[1].type !== ItemTypes.FILE && item[1].content.includes(id)
+    );
+
+    const currentIndex = parent[1].content.indexOf(id);
+
+    // Remove from the currentIndex.
+    parent[1].content.splice(currentIndex, 1);
+
+    // Insert to the nextIndex.
+    parent[1].content.splice(nextIndex, 0, id);
+
+    this.setState({
+      folderStructure: newFolderStructure
+    });
+  }
+
+  renderItem(structure, id, index = 0) {
     const item = structure[id];
 
     if (item.type === ItemTypes.ROOT) {
       return (
         <TreeView>
-          {item.content.map(childId => this.renerItem(structure, childId))}
+          {item.content.map((childId, childIndex) =>
+            this.renderItem(structure, childId, childIndex))}
         </TreeView>
       );
     } else if (item.type === ItemTypes.FOLDER) {
@@ -60,12 +87,20 @@ class App extends React.Component {
           name={item.name}
           onDrop={sourceId => this.handleMoveItem(sourceId, id)}
         >
-          {item.content.map(childId => this.renerItem(structure, childId))}
+          {item.content.map((childId, childIndex) =>
+            this.renderItem(structure, childId, childIndex))}
         </Folder>
       );
     } else if (item.type === ItemTypes.FILE) {
       return (
-        <File key={id} id={id} name={item.name} />
+        <File
+          key={id}
+          id={id}
+          index={index}
+          name={item.name}
+          onChangeOrder={(dragId, nextIndex) =>
+            this.handleChangeOrder(dragId, nextIndex)}
+        />
       );
     }
 
@@ -77,7 +112,7 @@ class App extends React.Component {
 
     return (
       <div className="App">
-        {this.renerItem(folderStructure, 0)}
+        {this.renderItem(folderStructure, 0)}
       </div>
     );
   }
