@@ -82,6 +82,8 @@ class Folder extends React.Component {
 }
 
 Folder.propTypes = {
+  // TODO: Make dependencies explicit.
+  // id: PropTypes.number.isRequired, // It's used in folderSource
   name: PropTypes.string.isRequired,
   children: PropTypes.node,
   // onDrop: PropTypes.func.isRequired, // It's used in folderTarget
