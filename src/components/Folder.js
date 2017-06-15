@@ -51,7 +51,7 @@ class Folder extends React.Component {
 
   render() {
     const {
-      name, children,
+      id, name, children, isSelected, onClick,
       connectDragSource, isDragging,
       connectDropTarget, isOver, canDrop
     } = this.props;
@@ -64,7 +64,11 @@ class Folder extends React.Component {
             connectDropTarget(
               <div
                 className="element Folder__name"
-                style={{ opacity: isDragging ? 0.5 : 1 }}
+                style={{
+                  opacity: isDragging ? 0.5 : 1,
+                  backgroundColor: isSelected ? '#ddd' : null
+                }}
+                onClick={() => onClick(id)}
               >
                 {name}
                 {isOver && !canDrop && Folder.renderOverlay('red')}
@@ -84,7 +88,10 @@ class Folder extends React.Component {
 Folder.propTypes = {
   // TODO: Make dependencies explicit.
   // id: PropTypes.number.isRequired, // It's used in folderSource
+  id: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
+  isSelected: PropTypes.bool,
+  onClick: PropTypes.func,
   children: PropTypes.node,
   // onDrop: PropTypes.func.isRequired, // It's used in folderTarget
   connectDragSource: PropTypes.func.isRequired,
@@ -95,6 +102,8 @@ Folder.propTypes = {
 };
 
 Folder.defaultProps = {
+  isSelected: false,
+  onClick: undefined,
   children: []
 };
 

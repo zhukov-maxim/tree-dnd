@@ -68,10 +68,17 @@ function collectSource(connect, monitor) {
   };
 }
 
-const File = ({ name, connectDragSource, isDragging, connectDropTarget }) => (
+const File = ({ id, name, isSelected, onClick, connectDragSource, isDragging, connectDropTarget }) => (
   connectDragSource(
     connectDropTarget(
-      <div className="element File" style={{ opacity: isDragging ? 0.5 : 1 }}>
+      <div
+        className="element File"
+        style={{
+          opacity: isDragging ? 0.5 : 1,
+          backgroundColor: isSelected ? '#ddd' : null
+        }}
+        onClick={() => onClick(id)}
+      >
         {name}
       </div>
     )
@@ -82,6 +89,8 @@ File.propTypes = {
   id: PropTypes.number.isRequired,
   index: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
+  isSelected: PropTypes.bool,
+  onClick: PropTypes.func,
   connectDragSource: PropTypes.func.isRequired,
   isDragging: PropTypes.bool.isRequired,
   connectDropTarget: PropTypes.func.isRequired,

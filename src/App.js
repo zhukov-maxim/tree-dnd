@@ -11,7 +11,8 @@ class App extends React.Component {
   constructor(props) {
     super();
     this.state = {
-      folderStructure: props.folderStructure
+      folderStructure: props.folderStructure,
+      currentItemId: undefined
     };
   }
 
@@ -69,6 +70,12 @@ class App extends React.Component {
     });
   }
 
+  handleClick(id) {
+    this.setState({
+      currentItemId: id
+    });
+  }
+
   renderItem(structure, id, index = 0) {
     const item = structure[id];
 
@@ -85,6 +92,8 @@ class App extends React.Component {
           key={id}
           id={id}
           name={item.name}
+          isSelected={id === this.state.currentItemId}
+          onClick={clickedId => this.handleClick(clickedId)}
           onDrop={sourceId => this.handleMoveItem(sourceId, id)}
         >
           {item.content.map((childId, childIndex) =>
@@ -98,6 +107,8 @@ class App extends React.Component {
           id={id}
           index={index}
           name={item.name}
+          isSelected={id === this.state.currentItemId}
+          onClick={clickedId => this.handleClick(clickedId)}
           onChangeOrder={(dragId, nextIndex) =>
             this.handleChangeOrder(dragId, nextIndex)}
         />
@@ -112,7 +123,15 @@ class App extends React.Component {
 
     return (
       <div className="App">
-        {this.renderItem(folderStructure, 0)}
+        <div className="App__tree-container">
+          {this.renderItem(folderStructure, 0)}
+        </div>
+        <div className="App__content-container">
+          {
+            this.state.currentItemId &&
+              this.state.folderStructure[this.state.currentItemId].name
+          }
+        </div>
       </div>
     );
   }

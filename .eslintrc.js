@@ -14,6 +14,7 @@ module.exports = {
     "comma-dangle": ["error", "never"],
     "no-console": "off",
     "react/jsx-filename-extension": ["error", { "extensions": [".js", ".jsx"] }],
+    "jsx-a11y/no-static-element-interactions": "off",
     "react/no-find-dom-node": "off",
     "no-confusing-arrow": "off",
     "no-return-assign": "off",

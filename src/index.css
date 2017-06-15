@@ -3,6 +3,26 @@ body {
   margin: 20px;
 }
 
+.App {
+  display: flex;
+}
+
+.App__tree-container,
+.App__content-container {
+  border: 1px solid #aaa;
+  border-radius: 4px;
+  overflow: auto;
+}
+
+.App__content-container {
+  padding: 10px;
+  min-width: 300px;
+}
+
+.App__tree-container + .App__content-container {
+  margin-left: 4px;
+}
+
 .element {
   position: relative;
   cursor: pointer;
@@ -31,8 +51,6 @@ body {
 
 .TreeView {
   padding: 6px;
-  border: 1px solid #aaa;
-  border-radius: 4px;
 }
 
 .TreeView {
