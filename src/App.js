@@ -5,14 +5,18 @@ import HTML5Backend from 'react-dnd-html5-backend';
 import TreeView from './components/TreeView';
 import Folder from './components/Folder';
 import File from './components/File';
-import ItemTypes from './constants';
+import { ItemTypes, ItemParts } from './constants';
 
 class App extends React.Component {
   constructor(props) {
     super();
     this.state = {
       folderStructure: props.folderStructure,
-      currentItemId: undefined
+      currentItemId: undefined,
+      targetItem: {
+        id: undefined,
+        part: undefined
+      }
     };
   }
 
@@ -44,7 +48,11 @@ class App extends React.Component {
     });
   }
 
-  handleChangeOrder(id, nextIndex) {
+  handleMoveFile(sourceId, targetId, targetPart) {
+    if (targetPart === ItemParts.INSERT) {
+      return;
+    }
+
     const currentfolderStructure = this.state.folderStructure;
 
     const newFolderStructure = {
@@ -53,20 +61,48 @@ class App extends React.Component {
 
     const entries = Object.entries(newFolderStructure);
 
-    const parent = entries.find(item =>
-      item[1].type !== ItemTypes.FILE && item[1].content.includes(id)
+    // Remove source from sourceParent.
+    const sourceParent = entries.find(item =>
+      item[1].content.includes(sourceId)
+    );
+    const sourceIndex = sourceParent[1].content.indexOf(sourceId);
+    sourceParent[1].content.splice(sourceIndex, 1);
+
+    // Find target parent.
+    const targetParent = entries.find(item =>
+      item[1].content.includes(targetId)
     );
 
-    const currentIndex = parent[1].content.indexOf(id);
+    // Finde target index.
+    const targetIndex = targetParent[1].content.indexOf(targetId);
 
-    // Remove from the currentIndex.
-    parent[1].content.splice(currentIndex, 1);
-
-    // Insert to the nextIndex.
-    parent[1].content.splice(nextIndex, 0, id);
+    // Insert source.
+    if (targetPart === ItemParts.BEFORE) {
+      targetParent[1].content.splice(targetIndex, 0, sourceId);
+    } else if (targetPart === ItemParts.AFTER) {
+      targetParent[1].content.splice(targetIndex + 1, 0, sourceId);
+    }
 
     this.setState({
-      folderStructure: newFolderStructure
+      folderStructure: newFolderStructure,
+      targetItem: {
+        id: undefined,
+        part: undefined
+      }
+    });
+  }
+
+  handleHoverTarget(targetId, targetPart) {
+    if (targetId === this.state.targetItem.id &&
+      targetPart === this.state.targetItem.part) {
+      return;
+    }
+
+    this.setState({
+      targetItem: {
+        id: targetId,
+        part: targetPart
+      }
     });
   }
 
@@ -108,9 +144,10 @@ class App extends React.Component {
           index={index}
           name={item.name}
           isSelected={id === this.state.currentItemId}
+          isTargeted={this.state.targetItem.id === id ? this.state.targetItem.part : false}
           onClick={clickedId => this.handleClick(clickedId)}
-          onChangeOrder={(dragId, nextIndex) =>
-            this.handleChangeOrder(dragId, nextIndex)}
+          onHoverTarget={(targetId, targetPart) => this.handleHoverTarget(targetId, targetPart)}
+          onFileDrop={(sourceId, part) => this.handleMoveFile(sourceId, id, part)}
         />
       );
     }

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { DragSource, DropTarget } from 'react-dnd';
-import ItemTypes from '../constants';
+import { ItemTypes } from '../constants';
 
 const folderSource = {
   beginDrag(props) {

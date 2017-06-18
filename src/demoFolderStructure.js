@@ -1,29 +1,25 @@
-import ItemTypes from './constants';
+import { ItemTypes } from './constants';
 
-const demoFolderStructure = {
+const demoFILEStructure = {
   0: {
     type: ItemTypes.ROOT,
-    content: [1, 7]
+    content: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
   },
   1: {
-    type: ItemTypes.FOLDER,
-    name: 'Answers',
-    content: [2, 3, 6]
+    type: ItemTypes.FILE,
+    name: 'Answers'
   },
   2: {
-    type: ItemTypes.FOLDER,
-    name: 'Read',
-    content: []
+    type: ItemTypes.FILE,
+    name: 'Read'
   },
   3: {
-    type: ItemTypes.FOLDER,
-    name: 'Unread',
-    content: [4, 8, 9, 5, 10, 11]
+    type: ItemTypes.FILE,
+    name: 'Unread'
   },
   4: {
-    type: ItemTypes.FOLDER,
-    name: 'Empty Folder',
-    content: []
+    type: ItemTypes.FILE,
+    name: 'Empty FILE'
   },
   5: {
     type: ItemTypes.FILE,
@@ -42,9 +38,8 @@ const demoFolderStructure = {
     name: 'From Balrog.msg'
   },
   9: {
-    type: ItemTypes.FOLDER,
-    name: 'Another Folder',
-    content: []
+    type: ItemTypes.FILE,
+    name: 'Another FILE'
   },
   10: {
     type: ItemTypes.FILE,
@@ -56,4 +51,4 @@ const demoFolderStructure = {
   }
 };
 
-export default demoFolderStructure;
+export default demoFILEStructure;

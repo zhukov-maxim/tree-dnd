@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { findDOMNode } from 'react-dom';
 import { DragSource, DropTarget } from 'react-dnd';
-import ItemTypes from '../constants';
+import { ItemTypes, ItemParts } from '../constants';
 
 const fileSource = {
   beginDrag(props) {
@@ -15,19 +15,14 @@ const fileSource = {
 
 const fileTarget = {
   hover(props, monitor, component) {
-    const dragIndex = monitor.getItem().index;
-    const hoverIndex = props.index;
-
-    // Don't replace items with themselves.
-    if (dragIndex === hoverIndex) {
-      return;
-    }
-
     // Determine rectangle on screen.
     const hoverBoundingRect = findDOMNode(component).getBoundingClientRect();
 
-    // Get vertical middle.
-    const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
+    const threshold = 0.2;
+
+    // Get top and bottom quarters.
+    const hoverTopPartY = (hoverBoundingRect.bottom - hoverBoundingRect.top) * threshold;
+    const hoverBottomPartY = (hoverBoundingRect.bottom - hoverBoundingRect.top) * (1 - threshold);
 
     // Determine mouse position.
     const clientOffset = monitor.getClientOffset();
@@ -35,23 +30,40 @@ const fileTarget = {
     // Get pixels to the top.
     const hoverClientY = clientOffset.y - hoverBoundingRect.top;
 
-    // Only perform the move when the mouse has crossed half of the item's height.
-    // When dragging downwards, only move when the cursor is below 50%.
-    // When dragging upwards, only move when the cursor is above 50%.
-
-    // Dragging downwards.
-    if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
-      return;
+    // TODO: (Rewrite) The target is hovered and we need to show its dropzones:
+    if (hoverClientY < hoverTopPartY) {
+      props.onHoverTarget(props.id, ItemParts.BEFORE);
+    } else if (hoverClientY > hoverBottomPartY) {
+      props.onHoverTarget(props.id, ItemParts.AFTER);
+    } else {
+      props.onHoverTarget(props.id, ItemParts.INSIDE);
     }
+  },
 
-    // Dragging upwards.
-    if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
-      return;
+  drop(props, monitor, component) {
+    const droppedItemId = monitor.getItem().id;
+
+    // Determine rectangle on screen.
+    const hoverBoundingRect = findDOMNode(component).getBoundingClientRect();
+
+    const threshold = 0.2;
+
+    // Get top and bottom quarters.
+    const hoverTopPartY = (hoverBoundingRect.bottom - hoverBoundingRect.top) * threshold;
+    const hoverBottomPartY = (hoverBoundingRect.bottom - hoverBoundingRect.top) * (1 - threshold);
+
+    // Determine mouse position.
+    const clientOffset = monitor.getClientOffset();
+
+    // Get pixels to the top.
+    const hoverClientY = clientOffset.y - hoverBoundingRect.top;
+
+    // TODO: (Rewrite) The target is hovered and we need to show its dropzones:
+    if (hoverClientY < hoverTopPartY) {
+      props.onFileDrop(droppedItemId, ItemParts.BEFORE);
+    } else if (hoverClientY > hoverBottomPartY) {
+      props.onFileDrop(droppedItemId, ItemParts.AFTER);
     }
-
-    // Change order.
-    const dragId = monitor.getItem().id;
-    props.onChangeOrder(dragId, hoverIndex);
   }
 };
 
@@ -68,18 +80,20 @@ function collectSource(connect, monitor) {
   };
 }
 
-const File = ({ id, name, isSelected, onClick, connectDragSource, isDragging, connectDropTarget }) => (
+const File = ({ id, name, isSelected, isTargeted, onClick, connectDragSource, isDragging, connectDropTarget }) => (
   connectDragSource(
     connectDropTarget(
       <div
         className="element File"
         style={{
-          opacity: isDragging ? 0.5 : 1,
+          opacity: isDragging ? 0.3 : 1,
           backgroundColor: isSelected ? '#ddd' : null
         }}
         onClick={() => onClick(id)}
       >
+        { isTargeted === ItemParts.BEFORE && <div className="drop-line drop-line_before" /> }
         {name}
+        { isTargeted === ItemParts.AFTER && <div className="drop-line drop-line_after" /> }
       </div>
     )
   )
@@ -90,11 +104,18 @@ File.propTypes = {
   index: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
   isSelected: PropTypes.bool,
+  isTargeted: PropTypes.oneOf([
+    false,
+    ItemParts.BEFORE,
+    ItemParts.INSIDE,
+    ItemParts.AFTER
+  ]),
   onClick: PropTypes.func,
+  // onFileDrop: PropTypes.func.isRequired, // It's used in folderTarget
   connectDragSource: PropTypes.func.isRequired,
   isDragging: PropTypes.bool.isRequired,
   connectDropTarget: PropTypes.func.isRequired,
-  onChangeOrder: PropTypes.func.isRequired
+  onHoverTarget: PropTypes.func.isRequired
 };
 
 export default
