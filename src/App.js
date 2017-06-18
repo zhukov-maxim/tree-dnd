@@ -20,39 +20,7 @@ class App extends React.Component {
     };
   }
 
-  handleMoveItem(source, target) {
-    const currentfolderStructure = this.state.folderStructure;
-
-    const newFolderStructure = {
-      ...currentfolderStructure
-    };
-
-    const entries = Object.entries(newFolderStructure);
-
-    // Remove source from previous folder.
-    entries.map((item) => {
-      if (item[1].type === ItemTypes.FILE) {
-        return item;
-      } else if (item[1].content.includes(source)) {
-        const index = item[1].content.indexOf(source);
-        item[1].content.splice(index, 1);
-      }
-      return item;
-    });
-
-    // Put source to target folder.
-    newFolderStructure[target].content.push(source);
-
-    this.setState({
-      folderStructure: newFolderStructure
-    });
-  }
-
-  handleMoveFile(sourceId, targetId, targetPart) {
-    if (targetPart === ItemParts.INSERT) {
-      return;
-    }
-
+  handleMoveItem(sourceId, targetId, targetPart) {
     const currentfolderStructure = this.state.folderStructure;
 
     const newFolderStructure = {
@@ -81,6 +49,9 @@ class App extends React.Component {
       targetParent[1].content.splice(targetIndex, 0, sourceId);
     } else if (targetPart === ItemParts.AFTER) {
       targetParent[1].content.splice(targetIndex + 1, 0, sourceId);
+    } else if (targetPart === ItemParts.INSIDE) {
+      // Insert on the last position.
+      newFolderStructure[targetId].content.unshift(sourceId);
     }
 
     this.setState({
@@ -129,8 +100,10 @@ class App extends React.Component {
           id={id}
           name={item.name}
           isSelected={id === this.state.currentItemId}
+          isTargeted={this.state.targetItem.id === id ? this.state.targetItem.part : false}
           onClick={clickedId => this.handleClick(clickedId)}
-          onDrop={sourceId => this.handleMoveItem(sourceId, id)}
+          onHoverTarget={(targetId, targetPart) => this.handleHoverTarget(targetId, targetPart)}
+          onFileDrop={(sourceId, part) => this.handleMoveItem(sourceId, id, part)}
         >
           {item.content.map((childId, childIndex) =>
             this.renderItem(structure, childId, childIndex))}
@@ -147,7 +120,7 @@ class App extends React.Component {
           isTargeted={this.state.targetItem.id === id ? this.state.targetItem.part : false}
           onClick={clickedId => this.handleClick(clickedId)}
           onHoverTarget={(targetId, targetPart) => this.handleHoverTarget(targetId, targetPart)}
-          onFileDrop={(sourceId, part) => this.handleMoveFile(sourceId, id, part)}
+          onFileDrop={(sourceId, part) => this.handleMoveItem(sourceId, id, part)}
         />
       );
     }
