@@ -83,6 +83,22 @@ class App extends React.Component {
     });
   }
 
+  handleClickToggle(id) {
+    const currentfolderStructure = this.state.folderStructure;
+
+    const newFolderStructure = {
+      ...currentfolderStructure
+    };
+
+    const entries = Object.entries(newFolderStructure);
+
+    entries[id][1].collapsed = !entries[id][1].collapsed;
+
+    this.setState({
+      folderStructure: newFolderStructure
+    });
+  }
+
   renderItem(structure, id, index = 0) {
     const item = structure[id];
 
@@ -102,6 +118,8 @@ class App extends React.Component {
           isSelected={id === this.state.currentItemId}
           isTargeted={this.state.targetItem.id === id ? this.state.targetItem.part : false}
           onClick={clickedId => this.handleClick(clickedId)}
+          collapsed={item.collapsed}
+          onClickToggle={clickedId => this.handleClickToggle(clickedId)}
           onHoverTarget={(targetId, targetPart) => this.handleHoverTarget(targetId, targetPart)}
           onFileDrop={(sourceId, part) => this.handleMoveItem(sourceId, id, part)}
         >

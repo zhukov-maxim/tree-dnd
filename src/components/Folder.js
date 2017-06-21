@@ -88,9 +88,11 @@ function collectSource(connect, monitor) {
 }
 
 const Folder = ({ id, name, children, isSelected, isTargeted, onClick,
+      collapsed, onClickToggle,
       connectDragSource, isDragging,
       connectDropTarget }) => (
-        <div className="Folder">
+        <div className={'Folder ' + (collapsed ? 'Folder_collapsed' : null)}>
+          <div className="Folder__toggle" onClick={() => onClickToggle(id)} />
           {
             connectDragSource(
               connectDropTarget(
@@ -129,6 +131,8 @@ Folder.propTypes = {
     ItemParts.AFTER
   ]),
   onClick: PropTypes.func,
+  collapsed: PropTypes.bool,
+  onClickToggle: PropTypes.func,
   // onFileDrop: PropTypes.func.isRequired, // It's used in folderTarget
   children: PropTypes.node,
   // onDrop: PropTypes.func.isRequired, // It's used in folderTarget
@@ -141,6 +145,8 @@ Folder.defaultProps = {
   isSelected: false,
   isTargeted: false,
   onClick: undefined,
+  collapsed: false,
+  onClickToggle: undefined,
   children: []
 };
 
