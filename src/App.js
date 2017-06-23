@@ -21,6 +21,16 @@ class App extends React.Component {
   }
 
   handleMoveItem(sourceId, targetId, targetPart) {
+    if (sourceId === targetId) {
+      this.setState({
+        targetItem: {
+          id: undefined,
+          part: undefined
+        }
+      });
+      return;
+    }
+
     const currentfolderStructure = this.state.folderStructure;
 
     const newFolderStructure = {
