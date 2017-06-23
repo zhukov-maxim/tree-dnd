@@ -37,6 +37,10 @@ body {
   background-color: #ffdf85;
 }
 
+.Folder {
+  white-space: nowrap;
+}
+
 .Folder__toggle {
   display: inline-block;
   position: relative;
