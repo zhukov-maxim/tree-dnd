@@ -41,7 +41,7 @@ class App extends React.Component {
 
     // Remove source from sourceParent.
     const sourceParent = entries.find(item =>
-      item[1].content.includes(sourceId)
+      item[1].content && item[1].content.includes(sourceId)
     );
     const sourceIndex = sourceParent[1].content.indexOf(sourceId);
     sourceParent[1].content.splice(sourceIndex, 1);
