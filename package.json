@@ -1,7 +1,19 @@
 {
   "name": "tree-dnd",
   "version": "0.1.0",
+  "description": "A proof of concept of a Drag&Drop tree-like structure.",
+  "keywords": [
+    "react",
+    "drag&drop",
+    "tree"
+  ],
   "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zhukov-maxim/tree-dnd"
+  },
+  "author": "Maxim Zhukov",
+  "license": "MIT",
   "dependencies": {
     "prop-types": "^15.5.10",
     "react": "^15.5.4",
