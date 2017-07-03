@@ -37,7 +37,39 @@ body {
   background-color: #ffdf85;
 }
 
+.Folder {
+  white-space: nowrap;
+}
+
+.Folder__toggle {
+  display: inline-block;
+  position: relative;
+  width: 14px;
+  height: 14px;
+  top: 1px;
+  cursor: pointer;
+}
+
+.Folder__toggle::after {
+  content: '';
+  position: absolute;
+  top: 5px;
+  left: 2px;
+  border-style: solid;
+  border-color: #666 transparent transparent;
+  border-width: 5px 5px 0;
+}
+
+.Folder__toggle:hover::after {
+  border-top-color: #333;
+}
+
+.Folder__toggle:active::after {
+  border-top-color: #000;
+}
+
 .Folder__name {
+  display: inline-block;
   font-weight: bold;
 }
 
@@ -49,6 +81,14 @@ body {
   margin-left: 20px;
 }
 
+.Folder_collapsed > .Folder__toggle::after {
+  transform: rotate(270deg);
+}
+
+.Folder_collapsed > .Folder__content {
+  display: none;
+}
+
 .TreeView {
   padding: 6px;
 }
@@ -57,14 +97,41 @@ body {
   user-select: none;
 }
 
-.drop-zone {
+.drop-area {
   box-sizing: border-box;
   position: absolute;
   top: 0;
   left: 0;
   height: 100%;
   width: 100%;
+  border: 2px solid #48f;
   border-radius: 4px;
   z-index: 1;
-  opacity: 0.4;
+}
+
+.drop-line {
+  position: absolute;
+  right: 0;
+  left: 0;
+  height: 2px;
+  background-color: #48f;
+}
+
+.drop-line::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: -2px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #48f;
+}
+
+.drop-line_before {
+  top: -1px;
+}
+
+.drop-line_after {
+  bottom: -1px;
 }

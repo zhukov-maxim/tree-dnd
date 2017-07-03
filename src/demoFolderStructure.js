@@ -1,4 +1,4 @@
-import ItemTypes from './constants';
+import { ItemTypes } from './constants';
 
 const demoFolderStructure = {
   0: {
@@ -7,52 +7,52 @@ const demoFolderStructure = {
   },
   1: {
     type: ItemTypes.FOLDER,
-    name: 'Answers',
+    name: 'Folder 1',
     content: [2, 3, 6]
   },
   2: {
     type: ItemTypes.FOLDER,
-    name: 'Read',
+    name: 'Folder 2',
     content: []
   },
   3: {
     type: ItemTypes.FOLDER,
-    name: 'Unread',
+    name: 'Folder 3',
     content: [4, 8, 9, 5, 10, 11]
   },
   4: {
     type: ItemTypes.FOLDER,
-    name: 'Empty Folder',
+    name: 'Folder 4',
     content: []
   },
   5: {
     type: ItemTypes.FILE,
-    name: 'From Baleog.msg'
+    name: 'File 5'
   },
   6: {
     type: ItemTypes.FILE,
-    name: 'From Olaf.msg'
+    name: 'File 6'
   },
   7: {
     type: ItemTypes.FILE,
-    name: 'From Erik.msg'
+    name: 'File 7'
   },
   8: {
     type: ItemTypes.FILE,
-    name: 'From Balrog.msg'
+    name: 'File 8'
   },
   9: {
     type: ItemTypes.FOLDER,
-    name: 'Another Folder',
+    name: 'Folder 9',
     content: []
   },
   10: {
     type: ItemTypes.FILE,
-    name: 'Gandalf'
+    name: 'File 10'
   },
   11: {
     type: ItemTypes.FILE,
-    name: 'Frodo'
+    name: 'File 11'
   }
 };
 
