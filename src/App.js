@@ -20,8 +20,25 @@ class App extends React.Component {
     };
   }
 
+  isSourceIncludesTarget(sourceId, targetId) {
+    const entries = Object.entries(this.state.folderStructure);
+
+    if (entries[sourceId][1].content) {
+      if (entries[sourceId][1].content.includes(targetId)) {
+        return true;
+      }
+      return !!entries[sourceId][1].content.find(item =>
+        this.isSourceIncludesTarget(item, targetId)
+      );
+    }
+
+    return false;
+  }
+
   handleMoveItem(sourceId, targetId, targetPart) {
-    if (sourceId === targetId) {
+    const sourceIncludesTarget = this.isSourceIncludesTarget(sourceId, targetId);
+
+    if (sourceId === targetId || sourceIncludesTarget) {
       this.setState({
         targetItem: {
           id: undefined,
