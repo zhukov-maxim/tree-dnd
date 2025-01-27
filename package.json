@@ -1,7 +1,7 @@
 {
   "name": "tree-dnd",
   "version": "0.1.0",
-  "homepage": "http://zhukov-maxim.github.io/tree-dnd",
+  "homepage": "https://zhukov-maxim.github.io/tree-dnd",
   "description": "A proof of concept of a Drag&Drop tree-like structure.",
   "keywords": [
     "react",
